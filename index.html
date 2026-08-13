@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yash Chaudhari | Android &amp; Mobile App Developer</title>
+<meta name="description" content="Yash Chaudhari is an Android &amp; Mobile App Developer building modern Android and cross-platform applications with Kotlin, Jetpack Compose, Flutter, and AI technologies." />
+<meta name="keywords" content="Mobile Developer, Android Developer, Flutter Developer, Kotlin, Jetpack Compose, Dart, Yash Chaudhari" />
+<meta name="author" content="Yash Chaudhari" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --kotlin:        #7F52FF;
+    --kotlin-dark:   #5E3BEE;
+
+    --bg:            #FFFFFF;
+    --bg-alt:        #FAFAFA;
+
+    --border:        #E5E7EB;
+
+    --text:          #111827;
+    --text-2:        #6B7280;
+    --text-3:        #9CA3AF;
+
+    --kotlin-tint:   rgba(127,82,255,.07);
+
+    --radius:        8px;
+    --radius-sm:     6px;
+    --radius-pill:   999px;
+
+    --font:          'Inter', system-ui, -apple-system, sans-serif;
+    --mono:          'JetBrains Mono', 'Fira Code', monospace;
+
+    --ease:          cubic-bezier(.4,0,.2,1);
+    --t:             160ms;
+
+    --wrap:          1080px;
+    --pad-section:   52px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; }
+  button { font-family: inherit; cursor: pointer; background: none; border: none; }
+  ul { list-style: none; }
+
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+  /* ─── NAV ────────────────────────────────────────────── */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--t) var(--ease);
+  }
+  #navbar.scrolled { border-color: var(--border); }
+  .nav-inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 0 24px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: var(--mono); font-weight: 600; font-size: .95rem;
+    display: flex; align-items: center; gap: 8px; color: var(--text);
+  }
+  .nav-logo-mark { color: var(--kotlin); width: 15px; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-size: .88rem; font-weight: 500; color: var(--text-2);
+    transition: color var(--t) var(--ease);
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .hamburger { display: none; flex-direction: column; gap: 4px; padding: 6px; }
+  .hamburger span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: var(--t) var(--ease); }
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+    background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    max-height: 0; overflow: hidden;
+    transition: max-height 260ms var(--ease);
+  }
+  .mobile-menu.open { max-height: 320px; }
+  .mobile-menu a { padding: 14px 24px; font-size: .95rem; font-weight: 500; border-bottom: 1px solid var(--border); }
+
+  /* ─── SECTION SHARED ─────────────────────────────────── */
+  section { padding: var(--pad-section) 0; }
+  .section-head { margin-bottom: 26px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: .74rem; font-weight: 600;
+    color: var(--kotlin); text-transform: uppercase; letter-spacing: .08em;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; letter-spacing: -.01em;
+  }
+  .section-title em { color: var(--kotlin); font-style: normal; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 420ms var(--ease), transform 420ms var(--ease);
+    will-change: opacity, transform;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: var(--radius-sm);
+    font-size: .88rem; font-weight: 600;
+    border: 1px solid transparent;
+    transition: var(--t) var(--ease);
+  }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--kotlin); color: #fff; }
+  .btn-primary:hover { background: var(--kotlin-dark); }
+  .btn-outline { border-color: var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--kotlin); color: var(--kotlin); }
+  .btn-ghost { color: var(--text-2); padding: 10px 4px; }
+  .btn-ghost:hover { color: var(--text); }
+
+  /* ─── HERO ───────────────────────────────────────────── */
+  #hero { padding-top: calc(60px + 44px); padding-bottom: 44px; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: .8rem; font-weight: 600; color: var(--kotlin);
+    background: var(--kotlin-tint); padding: 6px 12px; border-radius: var(--radius-pill);
+    margin-bottom: 18px;
+  }
+  .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--kotlin); }
+  .hero-name { font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .hero-role-line { margin-top: 10px; font-size: 1.15rem; font-weight: 700; color: var(--kotlin); }
+  .hero-stack { margin-top: 6px; font-family: var(--mono); font-size: .85rem; color: var(--text-2); }
+  .hero-desc { margin-top: 18px; font-size: 1rem; color: var(--text-2); max-width: 48ch; }
+  .hero-desc + .hero-desc { margin-top: 8px; }
+  .hero-ctas { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .hero-stats { margin-top: 32px; display: flex; gap: 28px; flex-wrap: wrap; }
+  .stat-num { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: var(--text); }
+  .stat-num span { color: var(--kotlin); }
+  .stat-lbl { font-size: .76rem; color: var(--text-3); margin-top: 2px; }
+
+  .hero-panel {
+    background: #1E1E2E; border-radius: var(--radius); overflow: hidden;
+    border: 1px solid #2E2E42;
+  }
+  .panel-bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; background: #17171F; }
+  .panel-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .panel-dot-r { background: #FF5F57; } .panel-dot-y { background: #FEBC2E; } .panel-dot-g { background: #28C840; }
+  .panel-file { margin-left: 8px; font-family: var(--mono); font-size: .72rem; color: #8A8AA0; }
+  .code-body { padding: 14px 16px; font-family: var(--mono); font-size: .72rem; line-height: 1.75; overflow-x: auto; }
+  .code-body code { display: block; white-space: pre; color: #C9C9DA; }
+  .ln { color: #4A4A5E; margin-right: 12px; user-select: none; }
+  .k { color: #C792EA; } .cls { color: #82AAFF; } .fn { color: #89DDFF; } .an { color: #F78C6C; } .op { color: #89DDFF; }
+
+  /* ─── TECH CHIPS (shared) ────────────────────────────── */
+  .tech-row { display: flex; flex-wrap: wrap; gap: 9px 10px; }
+  .tech-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 7px 13px; border: 1px solid var(--border); border-radius: var(--radius-pill);
+    background: var(--bg-alt); font-size: .82rem; font-weight: 500; color: var(--text);
+  }
+  .tech-chip svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .tech-chip.text-only { color: var(--text-2); font-weight: 500; }
+
+  /* ─── ABOUT ──────────────────────────────────────────── */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .about-text p { color: var(--text-2); margin-bottom: 14px; font-size: .97rem; }
+  .about-text strong { color: var(--text); font-weight: 600; }
+  .about-line {
+    margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: .86rem; color: var(--text-2); display: flex; flex-direction: column; gap: 4px;
+  }
+  .about-line b { color: var(--text); font-weight: 600; }
+  .about-side-title { font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 12px; }
+  .leetcode-badge {
+    margin-top: 20px; display: inline-flex; align-items: center; gap: 9px;
+    padding: 9px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: .85rem; font-weight: 600; color: var(--text);
+  }
+  .leetcode-badge svg { width: 17px; height: 17px; }
+
+  /* ─── PROJECTS ───────────────────────────────────────── */
+  .featured {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 26px; margin-bottom: 20px;
+  }
+  .featured-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase; padding: 4px 9px; border-radius: var(--radius-pill);
+    background: var(--kotlin-tint); color: var(--kotlin); margin-bottom: 10px;
+  }
+  .featured-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+  .featured-desc { color: var(--text-2); font-size: .93rem; max-width: 60ch; margin-bottom: 16px; }
+  .feat-points { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+  .feat-point { font-size: .88rem; color: var(--text-2); padding-left: 16px; position: relative; }
+  .feat-point::before { content: '—'; position: absolute; left: 0; color: var(--text-3); }
+
+  .projects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .proj-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; }
+  .proj-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .proj-desc { font-size: .85rem; color: var(--text-2); margin-bottom: 14px; flex-grow: 1; }
+  .proj-tech { margin-bottom: 14px; }
+  .proj-link { display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; font-weight: 600; color: var(--text); }
+  .proj-link:hover { color: var(--kotlin); }
+  .proj-link svg { width: 14px; height: 14px; }
+
+  /* ─── EXPERIENCE ─────────────────────────────────────── */
+  .exp-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .exp-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-bottom: 2px; }
+  .exp-title { font-size: 1.02rem; font-weight: 700; }
+  .exp-period { font-family: var(--mono); font-size: .78rem; color: var(--text-3); }
+  .exp-role { font-size: .86rem; color: var(--kotlin); font-weight: 600; margin-bottom: 14px; }
+  .exp-points { display: flex; flex-direction: column; gap: 8px; }
+  .exp-point { font-size: .9rem; color: var(--text-2); padding-left: 16px; position: relative; }
+  .exp-point::before { content: '—'; position: absolute; left: 0; color: var(--text-3); }
+
+  /* ─── CONTACT ────────────────────────────────────────── */
+  .contact-inner { text-align: left; }
+  .contact-title { font-size: clamp(1.5rem, 4vw, 2.1rem); font-weight: 800; letter-spacing: -.01em; margin-bottom: 6px; }
+  .contact-sub { color: var(--text-2); font-size: .95rem; margin-bottom: 28px; }
+  .contact-list { display: flex; flex-direction: column; max-width: 420px; border-top: 1px solid var(--border); }
+  .contact-row {
+    display: flex; align-items: center; gap: 12px; padding: 14px 4px;
+    border-bottom: 1px solid var(--border); font-size: .92rem;
+  }
+  .contact-row svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .contact-row .clabel { color: var(--text-3); width: 84px; flex-shrink: 0; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+  .contact-row .cval { font-weight: 500; color: var(--text); }
+  a.contact-row:hover .cval { color: var(--kotlin); }
+
+  /* ─── FOOTER ─────────────────────────────────────────── */
+  footer { border-top: 1px solid var(--border); padding: 28px 0; }
+  .footer-inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 0 24px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+  }
+  .footer-name { font-weight: 700; font-size: .92rem; }
+  .footer-desc { font-size: .78rem; color: var(--text-3); }
+
+  #back-top {
+    position: fixed; right: 20px; bottom: 20px; z-index: 90;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--text); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transform: translateY(6px);
+    transition: var(--t) var(--ease);
+  }
+  #back-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  #back-top svg { width: 16px; height: 16px; }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 860px) {
+    :root { --pad-section: 40px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-panel { order: -1; }
+    .about-grid { grid-template-columns: 1fr; gap: 28px; }
+    .projects-row { grid-template-columns: 1fr; }
+    #hero { padding-top: calc(60px + 28px); padding-bottom: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    * { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar" role="navigation" aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Yash Chaudhari — home">
+      <span class="nav-logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 1h5.5L7 7 1 13V1zM7 7l6-6v12L7 7z" fill="currentColor"/></svg>
+      </span>
+      yash.chaudhari
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+  <a href="#hero" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#projects" onclick="closeMobile()">Projects</a>
+  <a href="#experience" onclick="closeMobile()">Experience</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<main>
+
+<!-- ─── HERO ─────────────────────────────────────────────── -->
+<section id="hero" aria-label="Introduction">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-eyebrow reveal">
+        <span class="hero-dot" aria-hidden="true"></span>
+        Open to opportunities · 2028 graduate
+      </div>
+
+      <h1 class="hero-name reveal">Yash Chaudhari</h1>
+      <div class="hero-role-line reveal">Android &amp; Mobile App Developer</div>
+      <div class="hero-stack reveal">Kotlin • Jetpack Compose • Flutter • AI-powered mobile apps</div>
+
+      <p class="hero-desc reveal">
+        Building modern Android and cross-platform applications with Kotlin, Jetpack Compose, Flutter, and AI technologies.
+      </p>
+      <p class="hero-desc reveal">
+        Computer Science Engineering student focused on writing reliable, clean, and user-focused code — from architecture through to the details of the interface.
+      </p>
+
+      <div class="hero-ctas reveal">
+        <a href="#projects" class="btn btn-primary">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M5 8l3-3 3 3"/></svg>
+          View Projects
+        </a>
+        <a href="https://github.com/ykc454" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+          GitHub
+        </a>
+        <a href="https://drive.google.com/file/d/1A_qHx848a1Vbe2H-GS-sw2xU7P3DQZti/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline" aria-label="View Resume on Google Drive">
+          <svg viewBox="0 0 87.3 78" aria-hidden="true"><path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/><path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/><path d="m43.65 25-13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-11.4c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/><path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3-1.35-.8-2.9-1.2-4.5-1.2h-11.4c1.6 0 3.15.4 4.5 1.2 1.35.8 2.5 1.9 3.3 3.3l25.4 44h27.5c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+          View Resume
+        </a>
+      </div>
+
+      <div class="hero-stats reveal" role="list" aria-label="Statistics">
+        <div role="listitem">
+          <div class="stat-num">200<span>+</span></div>
+          <div class="stat-lbl">DSA Problems</div>
+        </div>
+        <div role="listitem">
+          <div class="stat-num">4<span>+</span></div>
+          <div class="stat-lbl">Projects</div>
+        </div>
+        <div role="listitem">
+          <div class="stat-num">8.91</div>
+          <div class="stat-lbl">GPA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel reveal" aria-label="Sample Kotlin code" role="presentation">
+      <div class="panel-bar">
+        <span class="panel-dot panel-dot-r" aria-hidden="true"></span>
+        <span class="panel-dot panel-dot-y" aria-hidden="true"></span>
+        <span class="panel-dot panel-dot-g" aria-hidden="true"></span>
+        <span class="panel-file">AiCareerPilotViewModel.kt</span>
+      </div>
+      <div class="code-body" aria-hidden="true">
+<code><span class="ln">1</span><span class="an">@HiltViewModel</span></code>
+<code><span class="ln">2</span><span class="k">class</span> <span class="cls">AiCareerPilotViewModel</span> <span class="an">@Inject</span> <span class="k">constructor</span>(</code>
+<code><span class="ln">3</span>  <span class="k">private val</span> useCase<span class="op">:</span> <span class="cls">AnalyzeResumeUseCase</span></code>
+<code><span class="ln">4</span>) <span class="op">:</span> <span class="cls">ViewModel</span>() {</code>
+<code><span class="ln">5</span>  <span class="k">private val</span> _state <span class="op">=</span> <span class="fn">MutableStateFlow</span>(<span class="cls">UiState</span>.Idle)</code>
+<code><span class="ln">6</span>  <span class="k">val</span> state <span class="op">=</span> _state.asStateFlow()</code>
+<code><span class="ln">7</span></code>
+<code><span class="ln">8</span>  <span class="k">fun</span> <span class="fn">analyze</span>(resume<span class="op">:</span> <span class="cls">String</span>, job<span class="op">:</span> <span class="cls">String</span>) {</code>
+<code><span class="ln">9</span>    viewModelScope.<span class="fn">launch</span> {</code>
+<code><span class="ln">10</span>      useCase(resume, job).<span class="fn">collect</span> {</code>
+<code><span class="ln">11</span>        _state.<span class="fn">emit</span>(it.<span class="fn">toUiState</span>())</code>
+<code><span class="ln">12</span>      }</code>
+<code><span class="ln">13</span>    }</code>
+<code><span class="ln">14</span>  }</code>
+<code><span class="ln">15</span>}</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT / SKILLS ───────────────────────────────────── -->
+<section id="about" aria-labelledby="about-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow reveal">About</p>
+      <h2 class="section-title reveal" id="about-h">A bit about <em>me</em></h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="reveal">
+          I'm a <strong>Computer Science Engineering student</strong> at MES Wadia College of Engineering, Pune, focused on mobile development.
+        </p>
+        <p class="reveal">
+          I mainly work with <strong>Android/Kotlin</strong> and <strong>Flutter/Dart</strong>. I've built apps using Jetpack Compose, Firebase, REST APIs, Room, Hilt, and Gemini AI — usually structured with Clean Architecture and MVVM.
+        </p>
+
+        <div class="about-line reveal">
+          <div><b>B.E. Computer Engineering</b> — MES Wadia College of Engineering, Pune</div>
+          <div>Expected 2028 · GPA 8.91</div>
+        </div>
+
+        <div class="leetcode-badge reveal">
+          <svg viewBox="0 0 24 24" fill="#FFA116" aria-hidden="true"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>
+          200+ LeetCode / DSA problems solved
+        </div>
+
+        <p class="about-side-title reveal" style="margin-top:28px;">Technologies I use</p>
+        <div class="tech-row reveal">
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#7F52FF"><path d="M24 24H0V0h24L12 12Z"/></svg>Kotlin</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#3DDC84"><path d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg>Android</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#4285F4"><path d="M12.135.003a2.577 2.577 0 0 0-1.42.344L2.55 5.06a2.577 2.577 0 0 0-.953.967l3.957 2.17a1.765 1.765 0 0 1 .603-.588l4.951-2.86a1.761 1.761 0 0 1 1.76 0l4.951 2.86a1.753 1.753 0 0 1 .526.46l3.921-2.265a2.577 2.577 0 0 0-.816-.744L13.291.347a2.577 2.577 0 0 0-1.152-.34Zm-.145 4.912a1.36 1.36 0 0 0-.68.182L6.36 7.953a1.345 1.345 0 0 0-.454.435l1.92 1.055a1.05 1.05 0 0 1 .31-.275l3.34-1.928a1.054 1.054 0 0 1 1.051 0l3.336 1.928a1.066 1.066 0 0 1 .238.199l.018-.01-.002-.002 1.877-1.08a1.353 1.353 0 0 0-.373-.322l-4.95-2.86a1.357 1.357 0 0 0-.68-.178Zm10.432 1.149-3.92 2.26a1.757 1.757 0 0 1 .2.812v5.715c0 .627-.332 1.21-.88 1.528l-4.95 2.86a1.761 1.761 0 0 1-.64.214v4.524a2.577 2.577 0 0 0 1.059-.313l8.162-4.713a2.577 2.577 0 0 0 1.289-2.23V7.297a2.577 2.577 0 0 0-.318-1.228Zm-20.937.238a2.577 2.577 0 0 0-.227.99v9.43c0 .918.491 1.767 1.293 2.229l8.162 4.713a2.57 2.57 0 0 0 1.225.336v-4.531a1.761 1.761 0 0 1-.833-.235L6.156 16.38a1.765 1.765 0 0 1-.877-1.528V9.136a1.776 1.776 0 0 1 .131-.676Zm16.67 2.223-1.89 1.092a1.058 1.058 0 0 1 .124.46v3.856c0 .378-.2.72-.526.907l-3.336 1.93a1.04 1.04 0 0 1-.295.107v2.17c.152-.027.304-.078.44-.157l4.949-2.859a1.36 1.36 0 0 0 .68-1.18V9.136a1.36 1.36 0 0 0-.147-.607Zm-12.387.13a1.36 1.36 0 0 0-.088.481v5.715a1.36 1.36 0 0 0 .68 1.18l4.95 2.86c.194.112.412.166.627.177v-2.174a1.054 1.054 0 0 1-.46-.123L8.14 14.843a1.054 1.054 0 0 1-.532-.908v-3.853a.99.99 0 0 1 .077-.38l-.034-.013z"/></svg>Jetpack Compose</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#02569B"><path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/></svg>Flutter</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#0175C2"><path d="M4.105 4.105S9.158 1.58 11.684.316a3.079 3.079 0 0 1 1.481-.315c.766.047 1.677.788 1.677.788L24 9.948v9.789h-4.263V24H9.789l-9-9C.303 14.5 0 13.795 0 13.105c0-.319.18-.818.316-1.105l3.789-7.895zm.679.679v11.787c.002.543.021 1.024.498 1.508L10.204 23h8.533v-4.263L4.784 4.784zm12.055-.678c-.899-.896-1.809-1.78-2.74-2.643-.302-.267-.567-.468-1.07-.462-.37.014-.87.195-.87.195L6.341 4.105l10.498.001z"/></svg>Dart</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#DD2C00"><path d="M19.455 8.369c-.538-.748-1.778-2.285-3.681-4.569-.826-.991-1.535-1.832-1.884-2.245a146 146 0 0 0-.488-.576l-.207-.245-.113-.133-.022-.032-.01-.005L12.57 0l-.609.488c-1.555 1.246-2.828 2.851-3.681 4.64-.523 1.064-.864 2.105-1.043 3.176-.047.241-.088.489-.121.738-.209-.017-.421-.028-.632-.033-.018-.001-.035-.002-.059-.003a7.46 7.46 0 0 0-2.28.274l-.317.089-.163.286c-.765 1.342-1.198 2.869-1.252 4.416-.07 2.01.477 3.954 1.583 5.625 1.082 1.633 2.61 2.882 4.42 3.611l.236.095.071.025.003-.001a9.59 9.59 0 0 0 2.941.568q.171.006.342.006c1.273 0 2.513-.249 3.69-.742l.008.004.313-.145a9.63 9.63 0 0 0 3.927-3.335c1.01-1.49 1.577-3.234 1.641-5.042.075-2.161-.643-4.304-2.133-6.371"/></svg>Firebase</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#F03C2E"><path d="M13.09 23.549a1.54 1.54 0 0 1-2.18 0L.451 13.089a1.54 1.54 0 0 1 0-2.179l7.191-7.19 2.733 2.733a1.85 1.85 0 0 0 .964 2.326v6.66a1.849 1.849 0 1 0 1.54 0V8.957l2.508 2.508a1.85 1.85 0 1 0 1.09-1.09l-2.634-2.634a1.85 1.85 0 0 0-2.378-2.377L8.73 2.63 10.91.451a1.54 1.54 0 0 1 2.179 0l10.459 10.46a1.54 1.54 0 0 1 0 2.179z"/></svg>Git</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#181717"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#8E75B2"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>Gemini AI</span>
+          <span class="tech-chip text-only">Room</span>
+          <span class="tech-chip text-only">Hilt</span>
+          <span class="tech-chip text-only">REST APIs</span>
+          <span class="tech-chip text-only">Bloc</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="about-side-title reveal">Open to</p>
+        <div class="tech-row reveal">
+          <span class="tech-chip text-only">Mobile Developer Internships</span>
+          <span class="tech-chip text-only">Android Developer Roles</span>
+          <span class="tech-chip text-only">Flutter Developer Roles</span>
+          <span class="tech-chip text-only">Open-Source Collaboration</span>
+        </div>
+
+        <p class="about-side-title reveal" style="margin-top:28px;">How I build</p>
+        <p class="reveal" style="font-size:.9rem; color:var(--text-2); max-width:40ch;">
+          Clean Architecture with MVVM, Coroutines and Flow for async work, and dependency injection with Hilt — keeps things testable as an app grows.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─────────────────────────────────────────── -->
+<section id="projects" aria-labelledby="projects-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow reveal">Work</p>
+      <h2 class="section-title reveal" id="projects-h">Featured <em>Projects</em></h2>
+    </div>
+
+    <div class="featured reveal" role="article" aria-label="Featured project: AI Career Pilot">
+      <div class="featured-hd">
+        <div>
+          <span class="badge">Featured</span>
+          <h3 class="featured-title">AI Career Pilot</h3>
+        </div>
+        <a href="https://github.com/ykc454/AI-Carrer-Pilot" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+          GitHub
+        </a>
+      </div>
+
+      <p class="featured-desc">AI-powered Android app that analyzes resumes against job descriptions, giving ATS-style compatibility reports, skill-gap insights, and actionable recommendations.</p>
+
+      <div class="tech-row reveal" style="margin-bottom:16px;">
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#7F52FF"><path d="M24 24H0V0h24L12 12Z"/></svg>Kotlin</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#4285F4"><path d="M12.135.003a2.577 2.577 0 0 0-1.42.344L2.55 5.06a2.577 2.577 0 0 0-.953.967l3.957 2.17a1.765 1.765 0 0 1 .603-.588l4.951-2.86a1.761 1.761 0 0 1 1.76 0l4.951 2.86a1.753 1.753 0 0 1 .526.46l3.921-2.265a2.577 2.577 0 0 0-.816-.744L13.291.347a2.577 2.577 0 0 0-1.152-.34Zm-.145 4.912a1.36 1.36 0 0 0-.68.182L6.36 7.953a1.345 1.345 0 0 0-.454.435l1.92 1.055a1.05 1.05 0 0 1 .31-.275l3.34-1.928a1.054 1.054 0 0 1 1.051 0l3.336 1.928a1.066 1.066 0 0 1 .238.199l.018-.01-.002-.002 1.877-1.08a1.353 1.353 0 0 0-.373-.322l-4.95-2.86a1.357 1.357 0 0 0-.68-.178Zm10.432 1.149-3.92 2.26a1.757 1.757 0 0 1 .2.812v5.715c0 .627-.332 1.21-.88 1.528l-4.95 2.86a1.761 1.761 0 0 1-.64.214v4.524a2.577 2.577 0 0 0 1.059-.313l8.162-4.713a2.577 2.577 0 0 0 1.289-2.23V7.297a2.577 2.577 0 0 0-.318-1.228Zm-20.937.238a2.577 2.577 0 0 0-.227.99v9.43c0 .918.491 1.767 1.293 2.229l8.162 4.713a2.57 2.57 0 0 0 1.225.336v-4.531a1.761 1.761 0 0 1-.833-.235L6.156 16.38a1.765 1.765 0 0 1-.877-1.528V9.136a1.776 1.776 0 0 1 .131-.676Zm16.67 2.223-1.89 1.092a1.058 1.058 0 0 1 .124.46v3.856c0 .378-.2.72-.526.907l-3.336 1.93a1.04 1.04 0 0 1-.295.107v2.17c.152-.027.304-.078.44-.157l4.949-2.859a1.36 1.36 0 0 0 .68-1.18V9.136a1.36 1.36 0 0 0-.147-.607Zm-12.387.13a1.36 1.36 0 0 0-.088.481v5.715a1.36 1.36 0 0 0 .68 1.18l4.95 2.86c.194.112.412.166.627.177v-2.174a1.054 1.054 0 0 1-.46-.123L8.14 14.843a1.054 1.054 0 0 1-.532-.908v-3.853a.99.99 0 0 1 .077-.38l-.034-.013z"/></svg>Jetpack Compose</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#DD2C00"><path d="M19.455 8.369c-.538-.748-1.778-2.285-3.681-4.569-.826-.991-1.535-1.832-1.884-2.245a146 146 0 0 0-.488-.576l-.207-.245-.113-.133-.022-.032-.01-.005L12.57 0l-.609.488c-1.555 1.246-2.828 2.851-3.681 4.64-.523 1.064-.864 2.105-1.043 3.176-.047.241-.088.489-.121.738-.209-.017-.421-.028-.632-.033-.018-.001-.035-.002-.059-.003a7.46 7.46 0 0 0-2.28.274l-.317.089-.163.286c-.765 1.342-1.198 2.869-1.252 4.416-.07 2.01.477 3.954 1.583 5.625 1.082 1.633 2.61 2.882 4.42 3.611l.236.095.071.025.003-.001a9.59 9.59 0 0 0 2.941.568q.171.006.342.006c1.273 0 2.513-.249 3.69-.742l.008.004.313-.145a9.63 9.63 0 0 0 3.927-3.335c1.01-1.49 1.577-3.234 1.641-5.042.075-2.161-.643-4.304-2.133-6.371"/></svg>Firebase</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#8E75B2"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>Gemini AI</span>
+        <span class="tech-chip text-only">Room</span>
+        <span class="tech-chip text-only">Hilt</span>
+      </div>
+
+      <div class="feat-points">
+        <div class="feat-point">Built with Kotlin, Jetpack Compose, and Clean Architecture (MVVM) for a clear separation between UI, business logic, and data</div>
+        <div class="feat-point">Integrated Gemini AI to parse resumes and job descriptions and generate the compatibility report, and Firebase Authentication to manage user sessions</div>
+        <div class="feat-point">Used Room to persist analysis history offline and Hilt to wire dependencies across all layers</div>
+        <div class="feat-point">Pulled live technology trend data from the Stack Overflow API to support the recommendations</div>
+      </div>
+    </div>
+
+    <div class="projects-row">
+      <div class="proj-card reveal" role="article" aria-label="Project: Weather App">
+        <h3 class="proj-title">Weather App</h3>
+        <p class="proj-desc">Flutter weather app using the OpenWeather REST API. Fetches and parses live JSON data asynchronously to show current conditions plus a 5-point hourly forecast, with reusable widgets and Bloc for state management.</p>
+        <div class="tech-row proj-tech">
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#02569B"><path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/></svg>Flutter</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#0175C2"><path d="M4.105 4.105S9.158 1.58 11.684.316a3.079 3.079 0 0 1 1.481-.315c.766.047 1.677.788 1.677.788L24 9.948v9.789h-4.263V24H9.789l-9-9C.303 14.5 0 13.795 0 13.105c0-.319.18-.818.316-1.105l3.789-7.895zm.679.679v11.787c.002.543.021 1.024.498 1.508L10.204 23h8.533v-4.263L4.784 4.784zm12.055-.678c-.899-.896-1.809-1.78-2.74-2.643-.302-.267-.567-.468-1.07-.462-.37.014-.87.195-.87.195L6.341 4.105l10.498.001z"/></svg>Dart</span>
+          <span class="tech-chip text-only">Bloc</span>
+        </div>
+        <a href="https://github.com/ykc454/Weather-App-Flutter-" target="_blank" rel="noopener noreferrer" class="proj-link" aria-label="View Weather App on GitHub">
+          View on GitHub
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+
+      <div class="proj-card reveal" role="article" aria-label="Project: VoiceUp">
+        <h3 class="proj-title">VoiceUp</h3>
+        <p class="proj-desc">Real-time social Android app built with Firebase Firestore, Compose UI, and Clean Architecture. Features live post updates, secure authentication, and a reactive UI layer powered by StateFlow.</p>
+        <div class="tech-row proj-tech">
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#7F52FF"><path d="M24 24H0V0h24L12 12Z"/></svg>Kotlin</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#DD2C00"><path d="M19.455 8.369c-.538-.748-1.778-2.285-3.681-4.569-.826-.991-1.535-1.832-1.884-2.245a146 146 0 0 0-.488-.576l-.207-.245-.113-.133-.022-.032-.01-.005L12.57 0l-.609.488c-1.555 1.246-2.828 2.851-3.681 4.64-.523 1.064-.864 2.105-1.043 3.176-.047.241-.088.489-.121.738-.209-.017-.421-.028-.632-.033-.018-.001-.035-.002-.059-.003a7.46 7.46 0 0 0-2.28.274l-.317.089-.163.286c-.765 1.342-1.198 2.869-1.252 4.416-.07 2.01.477 3.954 1.583 5.625 1.082 1.633 2.61 2.882 4.42 3.611l.236.095.071.025.003-.001a9.59 9.59 0 0 0 2.941.568q.171.006.342.006c1.273 0 2.513-.249 3.69-.742l.008.004.313-.145a9.63 9.63 0 0 0 3.927-3.335c1.01-1.49 1.577-3.234 1.641-5.042.075-2.161-.643-4.304-2.133-6.371"/></svg>Firebase</span>
+        </div>
+        <a href="https://github.com/ykc454" target="_blank" rel="noopener noreferrer" class="proj-link" aria-label="View VoiceUp on GitHub">
+          View on GitHub
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+
+      <div class="proj-card reveal" role="article" aria-label="Project: Post App">
+        <h3 class="proj-title">Post App</h3>
+        <p class="proj-desc">Jetpack Compose app consuming a REST API via Retrofit. Uses MVVM with a repository layer to abstract data sources, and Coroutines to handle network calls asynchronously.</p>
+        <div class="tech-row proj-tech">
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="#7F52FF"><path d="M24 24H0V0h24L12 12Z"/></svg>Kotlin</span>
+          <span class="tech-chip text-only">Retrofit</span>
+        </div>
+        <a href="https://github.com/ykc454" target="_blank" rel="noopener noreferrer" class="proj-link" aria-label="View Post App on GitHub">
+          View on GitHub
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE ───────────────────────────────────────── -->
+<section id="experience" aria-labelledby="exp-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow reveal">Experience</p>
+      <h2 class="section-title reveal" id="exp-h">What I've <em>built</em></h2>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-top">
+        <div class="exp-title">AI Career Pilot — Personal Project</div>
+        <div class="exp-period">2026 – Present</div>
+      </div>
+      <div class="exp-role">Mobile Application Developer</div>
+      <div class="exp-points">
+        <div class="exp-point">Built an AI-powered Android app using Kotlin and Jetpack Compose.</div>
+        <div class="exp-point">Added Gemini AI, Firebase Authentication, Room, Hilt, and the Stack Overflow API.</div>
+        <div class="exp-point">Structured the app using Clean Architecture and MVVM.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ──────────────────────────────────────────── -->
+<section id="contact" aria-labelledby="contact-h">
+  <div class="wrap contact-inner">
+    <p class="eyebrow reveal">Contact</p>
+    <h2 class="contact-title reveal" id="contact-h">Let's build something.</h2>
+    <p class="contact-sub reveal">Yash Chaudhari — Mobile Developer</p>
+
+    <div class="contact-list reveal">
+      <a href="mailto:yashchaudhari1605@gmail.com" class="contact-row" aria-label="Email Yash Chaudhari">
+        <svg viewBox="0 0 16 16" fill="none" stroke="var(--text-2)" stroke-width="1.5"><path d="M2 4h12v9H2z"/><path d="M2 4l6 5 6-5"/></svg>
+        <span class="clabel">Email</span>
+        <span class="cval">yashchaudhari1605@gmail.com</span>
+      </a>
+      <a href="https://drive.google.com/file/d/1A_qHx848a1Vbe2H-GS-sw2xU7P3DQZti/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="contact-row" aria-label="View Resume on Google Drive">
+        <svg viewBox="0 0 87.3 78"><path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/><path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/><path d="m43.65 25-13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-11.4c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/><path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3-1.35-.8-2.9-1.2-4.5-1.2h-11.4c1.6 0 3.15.4 4.5 1.2 1.35.8 2.5 1.9 3.3 3.3l25.4 44h27.5c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+        <span class="clabel">Resume</span>
+        <span class="cval">View on Google Drive</span>
+      </a>
+      <a href="https://github.com/ykc454" target="_blank" rel="noopener noreferrer" class="contact-row" aria-label="GitHub profile">
+        <svg viewBox="0 0 24 24" fill="var(--text-2)"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        <span class="clabel">GitHub</span>
+        <span class="cval">@ykc454</span>
+      </a>
+      <a href="https://www.linkedin.com/in/yashchaudhari1605/" target="_blank" rel="noopener noreferrer" class="contact-row" aria-label="LinkedIn profile">
+        <svg viewBox="0 0 16 16" fill="var(--text-2)"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 01.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+        <span class="clabel">LinkedIn</span>
+        <span class="cval">@yashchaudhari1605</span>
+      </a>
+      <div class="contact-row" style="cursor:default;">
+        <svg viewBox="0 0 24 24" fill="#FFA116"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>
+        <span class="clabel">LeetCode</span>
+        <span class="cval">200+ problems solved</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-name">Yash Chaudhari</div>
+      <div class="footer-desc">Android &amp; Mobile App Developer · Kotlin • Jetpack Compose • Flutter</div>
+    </div>
+    <div class="footer-desc">© 2026 Yash Chaudhari</div>
+  </div>
+</footer>
+
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 12V4M4 8l4-4 4 4"/></svg>
+</button>
+
+<script>
+  /* ── Mobile menu ─── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  function closeMobile() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  /* ── Nav scroll + active link ─── */
+  const navbar = document.getElementById('navbar');
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 10);
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    document.getElementById('back-top').classList.toggle('show', window.scrollY > 600);
+  }, { passive: true });
+
+  /* ── Scroll reveal ─── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
