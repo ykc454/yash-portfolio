@@ -38,8 +38,8 @@ a{color:inherit;text-decoration:none}
 .i-phone svg.frame rect{fill:none;stroke:#fff;stroke-width:2;stroke-dasharray:1600;stroke-dashoffset:1600;animation:draw 1.1s .2s cubic-bezier(.6,0,.2,1) forwards}
 .i-phone svg.frame .pill{fill:#fff;stroke:none;opacity:0;animation:fadeIn .3s 1.1s forwards}
 .i-screen{position:absolute;inset:12px;border-radius:32px;overflow:hidden;background:#0d0a12;opacity:0;animation:fadeIn .3s 1.1s forwards}
-.term{position:absolute;inset:0;padding:54px 16px 16px;font-family:"JetBrains Mono",monospace;font-size:.66rem;line-height:1.75;color:#c9bfd4}
-.term .ln{opacity:0;white-space:nowrap}
+.term{position:absolute;inset:0;padding:54px 14px 16px;font-family:"JetBrains Mono",monospace;font-size:.56rem;line-height:1.75;color:#c9bfd4;overflow:hidden}
+.term .ln{opacity:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .term .ln.on{opacity:1}
 .term .ok{color:#fff;font-weight:600}
 .term .pr{color:var(--pink)}
@@ -353,7 +353,7 @@ nav.scrolled{background:rgba(10,10,10,.8)!important}
         <div class="ln">Running Gradle task 'assembleRelease'</div>
         <div class="ln ok">✓ Built app-release.apk</div>
         <div class="ln"><span class="pr">$</span> flutter install</div>
-        <div class="ln">Launching yash_chaudhari...</div>
+        <div class="ln">Launching portfolio...</div>
         <div class="pbar" id="pbar"><i></i></div>
       </div>
       <div class="splash"><div class="mark">YC</div></div>
@@ -365,7 +365,7 @@ nav.scrolled{background:rgba(10,10,10,.8)!important}
   </div>
   <div class="reveal-name">
     <div class="big-name" id="bigName"></div>
-    <div class="role-plate">Mobile App Developer</div>
+    <div class="role-plate">Software Developer</div>
   </div>
   <button class="skip" id="skipBtn">SKIP</button>
 </div>
@@ -685,7 +685,7 @@ function startHero(){
     const t=setInterval(()=>{n+=step;if(n>=end){n=end;clearInterval(t);el.textContent=end+'+';}else el.textContent=n;},22);
   });
   // typed
-  const words=["flutter run --release","./gradlew assembleRelease","offline-first · synced ","gemini.generate(prompt)","git push origin main"];
+  const words=["flutter run --release","./gradlew assembleRelease","offline-first · synced ","ai.analyzeResume(data)","git push origin main"];
   const el=document.getElementById('typed');let wi=0,ci=0,del=false;
   (function tick(){
     const w=words[wi];
